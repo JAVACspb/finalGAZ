@@ -7,9 +7,7 @@ import com.example.finalgaz.dto.Response;
 import com.example.finalgaz.proc.BuilderProc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.camel.Endpoint;
-import org.apache.camel.LoggingLevel;
-import org.apache.camel.Message;
+import org.apache.camel.*;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.rest.RestParamType;
 import org.springframework.stereotype.Component;
@@ -27,16 +25,9 @@ import static org.springframework.http.HttpStatus.OK;
 @Slf4j
 public class VkRoute extends RouteBuilder {
 
-    BuilderProc builderProc = new BuilderProc();
+    BuilderProc builderProc;
 
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    Response vkResponse = new Response();
-
-
-    MemberResponse vkMemberResponse = new MemberResponse();
-    MemberResponse vkMemberResponse2 = new MemberResponse();
-    ResponseAgregator responseAgregator = new ResponseAgregator();
+    ResponseAgregator responseAgregator;
 
 
     @Override
@@ -57,18 +48,16 @@ public class VkRoute extends RouteBuilder {
                 .responseMessage().code(BAD_REQUEST.value()).message(BAD_REQUEST.getReasonPhrase()).endResponseMessage()
                 .to("direct:vk");
 
-        from("direct:vk").
-                process(builderProc)
-                .split(body(),responseAgregator )
-                .parallelProcessing()
-                .toD("${body}")
-                .log(LoggingLevel.INFO, "${body}");
-
-
-
-
-
-
+        from("direct:vk")
+                .streamCaching()
+                .process(builderProc)
+                .split(body(),responseAgregator).parallelProcessing()
+                .removeHeader(Exchange.COOKIE_HANDLER)
+                    .toD("${body}")
+                    .unmarshal().json()
+                .end()
+                .unmarshal().json()
+                .log(LoggingLevel.INFO, body().toString());
 
     }
 }

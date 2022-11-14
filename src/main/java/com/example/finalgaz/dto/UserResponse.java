@@ -1,12 +1,14 @@
 package com.example.finalgaz.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Data
 public class UserResponse {
-    private String last_name;
-    private String first_name;
-    private String middle_name;
+     String last_name;
+     String first_name;
+     String middle_name;
 }
