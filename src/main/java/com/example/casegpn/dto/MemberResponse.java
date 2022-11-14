@@ -1,4 +1,4 @@
-package com.example.finalgaz.dto;
+package com.example.casegpn.dto;
 
 import lombok.Getter;
 import lombok.Setter;

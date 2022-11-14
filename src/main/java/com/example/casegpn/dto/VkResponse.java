@@ -1,14 +1,14 @@
-package com.example.finalgaz.dto;
+package com.example.casegpn.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
+import java.util.*;
 
 @Getter
 @Setter
-public class Response {
+public class VkResponse implements Serializable {
     String firstName;
     String lastName;
     String middleName;

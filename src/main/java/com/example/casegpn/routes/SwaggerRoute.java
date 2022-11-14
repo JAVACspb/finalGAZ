@@ -1,13 +1,14 @@
-package com.example.finalgaz.routes;
+package com.example.casegpn.routes;
 
 import org.apache.camel.builder.RouteBuilder;
-import org.apache.camel.model.rest.RestBindingMode;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RestRoute extends RouteBuilder {
+public class SwaggerRoute extends RouteBuilder {
+
     @Override
     public void configure() throws Exception {
+        // Конфигурация REST и Swagger-UI
         restConfiguration()
                 .component("servlet")
                 .contextPath("/api")
